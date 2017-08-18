@@ -97,7 +97,7 @@
     ],
     "consistent-this": [
       "error",
-      "that"
+      "_"
     ],
     "max-nested-callbacks": [
       "error",

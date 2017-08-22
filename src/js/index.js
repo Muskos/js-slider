@@ -159,7 +159,7 @@ Slider.prototype.initEvent = function() {
     _.buttons.nextBtn.style.display = 'block';
     sliderWrapper.style.transform = 'translateX(' + translatePositionX + 'px)';
   });
-
+  _.buttons.nextBtn.style.display = 'block';
   _.buttons.prevBtn.style.display = 'none';
 };
 

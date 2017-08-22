@@ -30,7 +30,15 @@ Slider = (function () {
       }
     };
     _.slider = element;
-    _.options = Object.assign({}, _.defaults, settings);
+
+    // ie11 hack
+    for (let nextKey in settings) {
+      if (Object.prototype.hasOwnProperty.call(settings, nextKey)) {
+        _.defaults[nextKey] = settings[nextKey];
+      }
+    }
+
+    _.options = _.defaults;
 
     _.init();
   }
@@ -80,7 +88,7 @@ Slider.prototype.buildDom = function() {
   }
   sliderOuter.appendChild(_.getDomSliderElements());
   if (oldSliderWrap) {
-    oldSliderWrap.remove();
+    oldSliderWrap.parentNode.removeChild(oldSliderWrap)
   }
 };
 
@@ -93,12 +101,14 @@ Slider.prototype.getDomSliderElements = function() {
     sliderWrapperWidth = 0;
 
   _.elements = [];
-  Array.from(slideArr).forEach(function (element) {
+  [].slice.call(slideArr).forEach(function(element) {
     let slideStyle = element.currentStyle || window.getComputedStyle(element),
       margin = parseFloat(slideStyle.marginLeft) + parseFloat(slideStyle.marginRight),
       padding = parseFloat(slideStyle.paddingLeft) + parseFloat(slideStyle.paddingRight),
       border = parseFloat(slideStyle.borderLeftWidth) + parseFloat(slideStyle.borderRightWidth),
-      supportWidth = margin + padding + border,
+      supportWidth = (!isNaN(margin) ? margin : 0) +
+        (!isNaN(padding) ? padding : 0) +
+        (!isNaN(border) ? border : 0),
       clearSlideWidth = slideWidth - (supportWidth / _.getNeededCount());
 
     element.style.width = clearSlideWidth + 'px';
@@ -176,7 +186,9 @@ Slider.prototype.getNeededCount = function() {
 };
 
 (function () {
-  let caseSliderContainer = document.getElementById('jsSlider');
+  let caseSliderContainer = document.getElementById('jsSlider'),
+    caseSliderContainer2 = document.getElementById('jsSlider2');
 
   new Slider(caseSliderContainer);
+  new Slider(caseSliderContainer2);
 })();

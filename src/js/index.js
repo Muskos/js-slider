@@ -28,7 +28,8 @@
           prev: {
             classname: 'prev'
           }
-        }
+        },
+        slidesToScroll: 'auto'
       };
       _.slider = element;
 
@@ -129,13 +130,14 @@
       translatePositionX = 0,
       sliderWrapper = _.slider.getElementsByClassName('slider-wrapper')[0],
       iterator,
+      countToScrollSlider = _.options.slidesToScroll === 'auto' ? _.getNeededCount() : 1,
       nextElementCount = _.getNeededCount(),
       prevElementCount;
 
-    _.buttons.nextBtn.addEventListener('click', function () {
+    function nextClick() {
       for (
         iterator = nextElementCount;
-        iterator < nextElementCount + _.getNeededCount() && iterator < _.elements.length;
+        iterator < nextElementCount + countToScrollSlider && iterator < _.elements.length;
         iterator++
       ) {
         translatePositionX -= +_.elements[iterator].style.width.replace('px', '');
@@ -149,27 +151,33 @@
       }
       _.buttons.prevBtn.style.display = 'block';
       sliderWrapper.style.transform = 'translateX(' + translatePositionX + 'px)';
-    });
+    }
 
-    _.buttons.prevBtn.addEventListener('click', function () {
+    function prevClick() {
       iterator = prevElementCount;
-      prevElementCount = iterator - _.getNeededCount();
+      prevElementCount = iterator - countToScrollSlider;
       for (
         ;
-        iterator > (prevElementCount) && iterator > 0;
+        iterator > prevElementCount && iterator > 0;
         --iterator
       ) {
         translatePositionX += +_.elements[iterator - 1].style.width.replace('px', '');
       }
       nextElementCount = iterator + _.getNeededCount();
-      if (prevElementCount < 0) {
+      prevElementCount = iterator;
+      if (prevElementCount < 1) {
         _.buttons.prevBtn.style.display = 'none';
       } else {
         _.buttons.prevBtn.style.display = 'block';
       }
       _.buttons.nextBtn.style.display = 'block';
       sliderWrapper.style.transform = 'translateX(' + translatePositionX + 'px)';
-    });
+    }
+
+    _.buttons.nextBtn.removeEventListener('click', nextClick);
+    _.buttons.nextBtn.addEventListener('click', nextClick);
+    _.buttons.prevBtn.removeEventListener('click', prevClick);
+    _.buttons.prevBtn.addEventListener('click', prevClick);
     _.buttons.nextBtn.style.display = 'block';
     _.buttons.prevBtn.style.display = 'none';
   };

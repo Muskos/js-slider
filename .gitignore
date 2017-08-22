@@ -49,7 +49,6 @@ $RECYCLE.BIN/
 .settings
 
 ## compiled
-dist
 app
 
 ## else

@@ -103,5 +103,14 @@
 </div>
 
 <script src="./dist/js/app.js"></script>
+<script>
+  (function () {
+    let caseSliderContainer = document.getElementById('jsSlider'),
+      caseSliderContainer2 = document.getElementById('jsSlider2');
+
+    new Slider(caseSliderContainer);
+    new Slider(caseSliderContainer2);
+  })();
+</script>
 </body>
 </html>
